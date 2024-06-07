@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 
-app = FastAPI()
-
+app = FastAPI(
+    title = "MyDiaryApp"
+)
 
 @app.get("/")
 async def root():
