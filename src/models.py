@@ -1,40 +1,38 @@
-from datetime import datetime
-
-from sqlalchemy import MetaData, Table, Column, Integer, String, TIMESTAMP, ForeignKey, Boolean
+from sqlalchemy import MetaData, Table, Column, Integer, String, TIMESTAMP, ForeignKey, Boolean, func
 
 metadata = MetaData()
 
-users = Table(
-    "users",
+user = Table(
+    "user",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("login", String, nullable=False),
+    Column("email", String, nullable=False),
     Column("hashed_password", String, nullable=False),
     Column("nickname", String, nullable=False),
-    Column("created_at", TIMESTAMP, default=datetime.now, nullable=False),
+    Column("created_at", TIMESTAMP, server_default=func.now(), nullable=False),
     Column("is_active", Boolean, default=True, nullable=False),
-    Column("is superuser", Boolean, default=False, nullable=False),
-    Column("is verified", Boolean, default=False, nullable=False)
+    Column("is_superuser", Boolean, default=False, nullable=False),
+    Column("is_verified", Boolean, default=False, nullable=False)
 )
 
-diaries = Table(
-    "diaries",
+diary = Table(
+    "diary",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("author_id", Integer, ForeignKey("users.id"), nullable=False),
+    Column("author_id", Integer, ForeignKey("user.id"), nullable=False),
     Column("title", String, nullable=False),
     Column("content", String),
-    Column("created_at", TIMESTAMP, default=datetime.now, nullable=False)
+    Column("created_at", TIMESTAMP, server_default=func.now(), nullable=False)
 )
 
-notes = Table(
-    "notes",
+note = Table(
+    "note",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("dairy_id", Integer, ForeignKey("diaries.id"), nullable=False),
-    Column("author_id", Integer, ForeignKey("users.id"), nullable=False),
+    Column("root_diary_id", Integer, ForeignKey("diary.id"), nullable=False),
+    Column("author_id", Integer, ForeignKey("user.id"), nullable=False),
     Column("title", String, nullable=False),
     Column("content", String, nullable=False),
-    Column("created_at", TIMESTAMP, default=datetime.now, nullable=False)
+    Column("created_at", TIMESTAMP, server_default=func.now(), nullable=False)
 )
 

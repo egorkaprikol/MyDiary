@@ -1,8 +1,7 @@
-from datetime import datetime
 from typing import AsyncGenerator
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
-from sqlalchemy import String, Boolean, Column, Integer, TIMESTAMP
+from sqlalchemy import String, Boolean, Column, Integer, TIMESTAMP, func
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import DeclarativeMeta, declarative_base, sessionmaker
 
@@ -18,9 +17,9 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
     is_verified: bool = Column(Boolean, default=False, nullable=False)
     id = Column(Integer, primary_key=True)
-    login = Column(String, nullable=False)
+    email = Column(String, nullable=False)
     nickname = Column(String, nullable=False)
-    created_at = Column(TIMESTAMP, default=datetime.now, nullable=False)
+    created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
 
 
 engine = create_async_engine(DATABASE_URL)

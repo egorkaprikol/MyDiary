@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
 from fastapi_users import schemas
 from fastapi_users.schemas import PYDANTIC_V2
 
 
 class UserRead(schemas.BaseUser[int]):
     id: int
-    login: str
+    email: str
     nickname: str
     created_at: Optional[datetime]
     is_active: bool = True
@@ -23,7 +23,7 @@ class UserRead(schemas.BaseUser[int]):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    id: int
+    email: str
     nickname: str
     password: str
     is_active: Optional[bool] = True
