@@ -1,37 +1,19 @@
 from fastapi import FastAPI, Depends
-from fastapi_users import FastAPIUsers
-from src.auth.config import auth_backend
-from src.database import User
-from src.auth.manager import get_user_manager
-from src.auth.schemas import UserRead, UserCreate
+# from fastapi_users import FastAPIUsers
+# from src.auth.config import auth_backend
+# from src.database import User
+# from src.auth.manager import get_user_manager
+# from src.auth.schemas import UserRead, UserCreate
+from src.auth.router import router as router_auth
+from src.diary.router import router as router_diary
 
 app = FastAPI(
     title="MyDiaryApp"
 )
 
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
-
-app.include_router(
-    fastapi_users.get_auth_router(auth_backend),
-    prefix="/auth",
-    tags=["Auth"],
-)
-
-app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/auth",
-    tags=["Auth"],
-)
-current_user = fastapi_users.current_user()
-
-
-@app.get("/protected-route")
-def protected_route(user: User = Depends(current_user)):
-    return f"Hello, {user.nickname}"
-
+app.include_router(router_auth)
+app.include_router(router_diary)
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
