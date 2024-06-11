@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String, TIMESTAMP, ForeignKey, Boolean, func
+from sqlalchemy import MetaData, Table, Column, Integer, String, TIMESTAMP, Boolean, func, ForeignKey
 
 metadata = MetaData()
 
@@ -35,4 +35,3 @@ note = Table(
     Column("content", String, nullable=False),
     Column("created_at", TIMESTAMP, server_default=func.now(), nullable=False)
 )
-
